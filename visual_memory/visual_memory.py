@@ -41,7 +41,7 @@ def start():
     gui.leftClick()
 
 def getNumberSqaures():
-    global numSqares, coordinatesOfSquares
+    global numSqares, coordinatesOfSquares, running
     coordinatesOfSquares = []
     screenshot = gui.screenshot()
     screenshot = screenshot.crop((743, 547, 1217, 548))
@@ -51,10 +51,15 @@ def getNumberSqaures():
     width = 474
 
     try:
-        numSqares = int(width / x)
+        diff = width / x
+        if diff > 8.0:
+            diff -= 1
+        numSqares = int(diff)
+        print(diff)
         print("Squares: {}*{}".format(numSqares, numSqares))
     except:
         print("Number not found")
+        running = False
         sys.exit()
 
     sqare = int(width / numSqares)
@@ -140,7 +145,7 @@ def memory_optimization():
             continue
 
 def play():
-    global screenshots, memoryCheck, coordinatesOfSquares
+    global screenshots, memoryCheck, coordinatesOfSquares, running
     failure = 1
     for i in range(laps):
         print("Round Number {} of {}".format(i + failure, laps))
@@ -173,12 +178,8 @@ def play():
                 gui.leftClick()
                 time.sleep(0.5)
         else:
-            for myPos in coordinatesOfSquares:
-                gui.moveTo(myPos[0], myPos[1])
-                gui.leftClick()
-                if hex_color_num(gui.screenshot(), '#154368', 100) == 3:
-                    break
-                time.sleep(1)
+            running = False
+            sys.exit()
 
         gui.moveTo(980, 250)
         screenshots = []
