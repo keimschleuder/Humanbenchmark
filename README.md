@@ -5,5 +5,6 @@
 ## What I already have
 
 - Sequence Memory Test
+- Visual Memory Test
 
 ## Have fun
