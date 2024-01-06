@@ -102,6 +102,8 @@ def hex_color_num(image, hex_color, tolerance):
         pixel_color = rgb_image.getpixel(mySqare)
         if color_distance(pixel_color, rgb_color) <= tolerance:
             count += 1
+            if count == 3:
+                break
 
 def find_white_pixel():
     global coordinatesOfSquares, screenshots
@@ -174,8 +176,9 @@ def play():
             for myPos in coordinatesOfSquares:
                 gui.moveTo(myPos[0], myPos[1])
                 gui.leftClick()
-                if hex_color_num(gui.screenshot(), '#154368', 50) == 3:
+                if hex_color_num(gui.screenshot(), '#154368', 100) == 3:
                     break
+                time.sleep(1)
 
         gui.moveTo(980, 250)
         screenshots = []
