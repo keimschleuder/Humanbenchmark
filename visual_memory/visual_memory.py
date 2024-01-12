@@ -44,7 +44,7 @@ def getNumberSqaures():
     global numSqares, coordinatesOfSquares, running
     coordinatesOfSquares = []
     screenshot = gui.screenshot()
-    screenshot = screenshot.crop((743, 547, 1217, 548))
+    screenshot = screenshot.crop((743, 300, 1217, 301))
 
     x = search_hex_color(screenshot, '#2B87D1', 20)
 
