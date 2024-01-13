@@ -5,7 +5,7 @@ import numpy as np
 import time
 import threading
 
-gui.PAUSE = 0.00001
+gui.PAUSE = 0.000000001
 
 corners = [[(743, 290), (1217, 290)], 
            [(743, 764), (1217, 764)]]
@@ -123,12 +123,12 @@ def memory_optimization():
 
 def play():
     global screenshots, memoryCheck
+    getNumberSqaures()
     for i in range(laps):
-        print("Round Number {}".format(i + 1))
-        getNumberSqaures()
+        print("Round Number {} of {}".format(i + 1, laps))
         j = 0
-        lastChange = 0
         positions = [None]
+        lastChange = 0
         while True:
             try:
                 pos = find_white_pixel()
@@ -148,7 +148,6 @@ def play():
             else:
                 gui.moveTo(myPos[0], myPos[1])
                 gui.leftClick()
-                time.sleep(0.5)
         gui.moveTo(980, 250)
         screenshots = []
         memoryCheck = 0

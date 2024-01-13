@@ -5,7 +5,7 @@ import numpy as np
 import time
 import threading
 
-gui.PAUSE = 0.00001
+gui.PAUSE = 0.0000000001
 
 corners = [[(743, 290), (1217, 290)], 
            [(743, 764), (1217, 764)]]
@@ -176,7 +176,6 @@ def play():
                     continue
                 gui.moveTo(myPos[0], myPos[1])
                 gui.leftClick()
-                time.sleep(0.5)
         else:
             running = False
             sys.exit()
