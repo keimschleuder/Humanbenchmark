@@ -1,17 +1,15 @@
 import pyautogui as gui
-from PIL import Image
 import sys
 import numpy as np
 import time
 import threading
 
-gui.PAUSE = 0.0000000001
+gui.PAUSE = 0.0000001
 
 corners = [[(743, 290), (1217, 290)], 
            [(743, 764), (1217, 764)]]
 
 screenshots = []
-sequence = []
 coordinatesOfSquares = []
 numSqares = 0
 memoryCheck = 0
@@ -176,6 +174,7 @@ def play():
                     continue
                 gui.moveTo(myPos[0], myPos[1])
                 gui.leftClick()
+                time.sleep(0.1)
         else:
             running = False
             sys.exit()
