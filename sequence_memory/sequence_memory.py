@@ -1,5 +1,4 @@
 import pyautogui as gui
-from PIL import Image
 import sys
 import numpy as np
 import time
@@ -7,8 +6,7 @@ import threading
 
 gui.PAUSE = 0.000000001
 
-corners = [[(743, 290), (1217, 290)], 
-           [(743, 764), (1217, 764)]]
+edges = (743, 290, 1217, 764) # left, upper, right, lower
 
 screenshots = []
 sequence = []
@@ -26,7 +24,7 @@ def start_game():
     if found == 0:
         print("Found Start Button")
         screenshotting.start()
-        memory.start()
+#        memory.start()
         time.sleep(1)
         starting.start()
         time.sleep(1.5)
@@ -41,27 +39,28 @@ def start():
     gui.leftClick()
 
 def getNumberSqaures():
-    global numSqares, coordinatesOfSquares
+    global numSqares, coordinatesOfSquares, running
     screenshot = gui.screenshot()
-    screenshot = screenshot.crop((743, 547, 1217, 548))
+    screenshot = screenshot.crop((edges[0], 547, edges[2], 548))
 
     x = search_hex_color(screenshot, '#2B87D1', 20)
 
-    width = 474
+    width = edges[2] - edges[0]
 
     try:
         numSqares = int(width / x)
         print("Squares: {}*{}".format(numSqares, numSqares))
     except:
         print("Number not found")
+        running = False
         sys.exit()
 
     sqare = int(width / numSqares)
 
     for i in range(numSqares):
-        my_x = 743 + sqare * (i + 0.5)
+        my_x = edges[0] + sqare * (i + 0.5)
         for j in range(numSqares):
-            my_y = 290 + sqare * (j + 0.5)
+            my_y = edges[1] + sqare * (j + 0.5)
             coordinatesOfSquares.append((my_x, my_y))
 
 def color_distance(c1, c2):
@@ -108,13 +107,18 @@ def get_screenshot():
         screenshots.append(gui.screenshot())
 
 def memory_optimization():
-    global screenshots, memoryCheck
+    global screenshots, memoryCheck, coordinatesOfSquares
     while running:
         try:
-            image = screenshots[memoryCheck].crop((929, 656, 930, 657))
-            image = image.convert('L')
-            image = np.array(image)
-            if np.sum(image == 255) == 0:
+            found = False
+            image = screenshots[memoryCheck].crop(edges)
+            for mySqare in coordinatesOfSquares:
+                pixel_color = image.getpixel(mySqare)
+                if pixel_color == (255, 255, 255):
+                    found = True
+                    break
+            
+            if not found:
                 screenshots.pop[memoryCheck]
             else:
                 memoryCheck += 1
@@ -126,6 +130,7 @@ def play():
     getNumberSqaures()
     for i in range(laps):
         print("Round Number {} of {}".format(i + 1, laps))
+        print(len(screenshots))
         j = 0
         positions = [None]
         lastChange = 0
@@ -139,7 +144,7 @@ def play():
                 print(pos)
                 lastChange = j
             j += 1
-            if lastChange + 20 <= j:
+            if lastChange + 30 <= j:
                 break
 
         for myPos in positions:
